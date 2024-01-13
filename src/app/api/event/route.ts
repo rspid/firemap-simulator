@@ -42,7 +42,7 @@ export async function POST(request: Request) {
   const sensor = res.sensor;
   const oneSensor = await db.sensor.findUnique({
     where: {
-      id: sensor,
+      id: sensor.id,
     },
   });
   if (!oneSensor) return;
@@ -52,6 +52,7 @@ export async function POST(request: Request) {
       id: oneSensor.id,
     },
     data: {
+      intensity: sensor.intensity,
       events: {
         create: [{ event: { create: { is_over: false } } }],
       },

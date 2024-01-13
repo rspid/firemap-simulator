@@ -8,11 +8,18 @@ const MapComponent = dynamic(() => import("../components/Map"), {
 
 const MyPage = () => {
   const [sensors, setSensors] = useState([]);
+  const [sensorsWithoutEvent, setSensorsWithoutEvent] = useState([]);
+  const [reloadData, setReloadData] = useState(false);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("/api/sensor/active");
-        setSensors(response.data);
+        const sensorsWithEvents = await axios.get("/api/sensor/active");
+        setSensors(sensorsWithEvents.data);
+        const sensorsWithEventsWithoutEvents = await axios.get(
+          "/api/sensor/noevent"
+        );
+        setSensorsWithoutEvent(sensorsWithEventsWithoutEvents.data);
       } catch (error) {
         console.error("Erreur lors de la requête à votre API", error);
       }
@@ -26,12 +33,12 @@ const MyPage = () => {
     return () => {
       clearInterval(intervalId);
     };
-  }, []);
-  const data = { sensors };
+  }, [reloadData]);
+  const data = { sensors, sensorsWithoutEvent };
 
   return (
     <div>
-      <MapComponent data={data} />
+      <MapComponent data={data} reloadData={setReloadData} />
     </div>
   );
 };
