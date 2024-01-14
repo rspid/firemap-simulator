@@ -20,20 +20,17 @@ export async function GET() {
       },
     },
   });
-  return Response.json(res);
-}
-
-export async function PUT(request: Request) {
-  const res = await request.json();
-  const event = res.event;
-  const updatedEvent = await db.event.update({
-    where: {
-      id: event,
-    },
-    data: {
-      is_over: true,
-    },
-  });
-
-  return Response.json({ updatedEvent });
+  const updatedEvents = await Promise.all(
+    res.map(async (event) => {
+      await db.event.update({
+        where: {
+          id: event.id,
+        },
+        data: {
+          is_over: true,
+        },
+      });
+    })
+  );
+  return Response.json(updatedEvents.length);
 }
