@@ -1,5 +1,6 @@
 "use client";
 import axios from "axios";
+import { revalidatePath } from "next/cache";
 import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 const MapComponent = dynamic(() => import("../components/Map"), {
@@ -20,6 +21,7 @@ const MyPage = () => {
           "/api/sensor/noevent"
         );
         setSensorsWithoutEvent(sensorsWithEventsWithoutEvents.data);
+        revalidatePath("/");
       } catch (error) {
         console.error("Erreur lors de la requête à votre API", error);
       }
@@ -28,7 +30,7 @@ const MyPage = () => {
 
     const intervalId = setInterval(() => {
       fetchData();
-    }, 20000); // 10000 millisecondes = 10 secondes
+    }, 2000);
 
     return () => {
       clearInterval(intervalId);
