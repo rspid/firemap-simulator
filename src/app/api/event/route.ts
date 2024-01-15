@@ -80,3 +80,19 @@ export async function POST(request: Request) {
 
   return Response.json({ id, is_over, created_at, sensors });
 }
+
+export async function GET() {
+  const res = await db.event.findMany({
+    where: {
+      is_over: false,
+    },
+    include: {
+      sensors: {
+        include: {
+          sensor: true,
+        },
+      },
+    },
+  });
+  return Response.json(res);
+}
