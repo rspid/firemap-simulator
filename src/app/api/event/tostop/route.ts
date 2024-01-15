@@ -7,7 +7,9 @@ export async function GET() {
       sensors: {
         every: {
           sensor: {
-            intensity: 0,
+            intensity: {
+              equals: 0,
+            },
           },
         },
       },
