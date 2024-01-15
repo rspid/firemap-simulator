@@ -1,5 +1,5 @@
 import { Sensor } from "@/server/types";
-import { Icon } from "leaflet";
+import { Icon, LeafletMouseEvent } from "leaflet";
 import "leaflet/dist/leaflet.css";
 import React, { useState } from "react";
 import { Circle, MapContainer, Marker, TileLayer, useMap } from "react-leaflet";
@@ -20,7 +20,7 @@ const Map = ({ data, reloadData }: MapType) => {
   const [sensorId, setSensorId] = useState(0);
   const [reload, setReload] = useState(false);
 
-  const handleCircleClick = (event, sensor) => {
+  const handleCircleClick = (event: LeafletMouseEvent, sensor: Sensor) => {
     setShowModal(true);
     setSensorId(sensor.id);
   };
